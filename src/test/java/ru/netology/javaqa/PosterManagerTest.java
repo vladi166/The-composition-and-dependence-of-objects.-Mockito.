@@ -5,17 +5,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class PosterManagerTest {
-    PosterManager manager = new PosterManager(7);
 
-    @BeforeEach
-    public void setManager() {
+    @Test
+    public void shouldAllPoster() {//добавление фильмов
+        PosterManager manager = new PosterManager();
         manager.add("Бладшот");
         manager.add("Вперед");
         manager.add("Отель Белград");
-    }
-
-    @Test
-    public void shouldAllPoster() {
 
         String[] expected = {"Бладшот", "Вперед", "Отель Белград"};
         String[] actual = manager.findAll();
@@ -24,7 +20,7 @@ public class PosterManagerTest {
     }
 
     @Test
-    public void shouldPosterEqualIsTheLimit() {
+    public void shouldPosterDefaultLimit() { //вывод последних фильмов с лимитом по умолчанию 5
         PosterManager manager = new PosterManager();
 
         manager.add("Бладшот");
@@ -40,7 +36,30 @@ public class PosterManagerTest {
     }
 
     @Test
-    public void shouldPosterBelowLimit() {
+    public void shouldPosterNewLimit () {// вывод фильмов конструктором с лимитом 7
+        PosterManager manager = new PosterManager(7);
+
+        manager.add("Бладшот");
+        manager.add("Вперед");
+        manager.add("Отель Белград");
+        manager.add("Джентльмены");
+        manager.add("Человек неведимка");
+        manager.add("Тролли. Мировой тур");
+        manager.add("Номер один");
+
+        String[] expected = {"Номер один", "Тролли. Мировой тур", "Человек неведимка", "Джентльмены", "Отель Белград", "Вперед", "Бладшот"};
+        String[] actual = manager.findLast();
+
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldPosterBelowNewLimit() {// вывод последних фильмов, общее количество которых меньше лимита
+        PosterManager manager = new PosterManager();
+
+        manager.add("Бладшот");
+        manager.add("Вперед");
+        manager.add("Отель Белград");
 
         String[] expected = {"Отель Белград", "Вперед", "Бладшот"};
         String[] actual = manager.findLast();
@@ -49,14 +68,19 @@ public class PosterManagerTest {
     }
 
     @Test
-    public void shouldPosterAboveLimit() {
+    public void shouldPosterAboveNewLimit() {// вывод последних фильмов, общее количество которых больше лимита
+        PosterManager manager = new PosterManager(3);
 
+        manager.add("Бладшот");
+        manager.add("Вперед");
+        manager.add("Отель Белград");
         manager.add("Джентльмены");
         manager.add("Человек неведимка");
         manager.add("Тролли. Мировой тур");
         manager.add("Номер один");
+        manager.add("Паразиты");
 
-        String[] expected = {"Номер один", "Тролли. Мировой тур", "Человек неведимка", "Джентльмены", "Отель Белград", "Вперед", "Бладшот"};
+        String[] expected = {"Паразиты", "Номер один", "Тролли. Мировой тур"};
         String[] actual = manager.findLast();
 
         Assertions.assertArrayEquals(expected, actual);
